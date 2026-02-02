@@ -659,6 +659,37 @@ export async function registerRoutes(
     }
   });
 
+  app.patch("/api/meetings/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { title, description, scheduledAt, duration } = req.body;
+      
+      const updateData: any = {};
+      if (title !== undefined) updateData.title = title;
+      if (description !== undefined) updateData.description = description === "" ? null : description;
+      if (scheduledAt !== undefined) updateData.scheduledAt = new Date(scheduledAt);
+      if (duration !== undefined) updateData.duration = duration;
+      
+      if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ message: "No valid fields to update" });
+      }
+      
+      const [updated] = await db.update(meetings)
+        .set(updateData)
+        .where(eq(meetings.id, id))
+        .returning();
+      
+      if (!updated) {
+        return res.status(404).json({ message: "Meeting not found" });
+      }
+      
+      res.json(updated);
+    } catch (error: any) {
+      log(`Error updating meeting: ${error.message}`, "api");
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   app.patch("/api/meetings/:roomId/end", async (req, res) => {
     try {
       const { roomId } = req.params;
