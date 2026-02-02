@@ -44,7 +44,9 @@ async function getUserByEmail(email: string) {
 }
 
 export function setupAuth(app: Express) {
-  const store = new PostgresSessionStore({ pool, createTableIfMissing: true });
+  // Note: Session table is created via SQL migration, not auto-created
+  // This avoids ENOENT errors in production when the bundled code can't find table.sql
+  const store = new PostgresSessionStore({ pool, createTableIfMissing: false });
   const isProduction = process.env.NODE_ENV === "production";
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET!,
