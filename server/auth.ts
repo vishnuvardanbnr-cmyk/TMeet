@@ -45,15 +45,17 @@ async function getUserByEmail(email: string) {
 
 export function setupAuth(app: Express) {
   const store = new PostgresSessionStore({ pool, createTableIfMissing: true });
+  const isProduction = process.env.NODE_ENV === "production";
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: false,
     store,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
+      sameSite: isProduction ? "none" : "lax",
     },
   };
 
