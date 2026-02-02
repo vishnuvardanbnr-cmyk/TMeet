@@ -1,9 +1,17 @@
-import { Video, Clock, Users, MoreVertical, Play, Calendar } from "lucide-react";
+import { Video, Clock, MoreVertical, Play, Calendar, Link2, Check, Mail, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format, formatDistanceToNow } from "date-fns";
 import { motion } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "wouter";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface Meeting {
   id: number;
@@ -17,6 +25,9 @@ interface Meeting {
 
 export function UpcomingMeetings() {
   const [, navigate] = useLocation();
+  const [copiedId, setCopiedId] = useState<number | null>(null);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   
   const { data: meetings = [], isLoading } = useQuery<Meeting[]>({
     queryKey: ["/api/meetings"],
@@ -27,8 +38,33 @@ export function UpcomingMeetings() {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/meetings/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete meeting");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/meetings"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/meetings/today"] });
+      toast({ title: "Meeting deleted" });
+    },
+  });
+
   const handleJoinMeeting = (roomId: string) => {
     navigate(`/room/${roomId}/join`);
+  };
+
+  const handleCopyLink = async (meeting: Meeting) => {
+    const meetingUrl = `${window.location.origin}/room/${meeting.roomId}/join`;
+    try {
+      await navigator.clipboard.writeText(meetingUrl);
+      setCopiedId(meeting.id);
+      toast({ title: "Link copied", description: "Meeting link copied to clipboard" });
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch (err) {
+      toast({ title: "Copy failed", variant: "destructive" });
+    }
   };
 
   if (isLoading) {
@@ -120,9 +156,39 @@ export function UpcomingMeetings() {
                     <Button size="sm" className="h-8" onClick={() => handleJoinMeeting(meeting.roomId)}>
                       {hasEnded ? 'Rejoin' : 'Join'}
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <MoreVertical className="w-4 h-4" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleCopyLink(meeting)}>
+                          {copiedId === meeting.id ? (
+                            <>
+                              <Check className="w-4 h-4 mr-2" />
+                              Copied!
+                            </>
+                          ) : (
+                            <>
+                              <Link2 className="w-4 h-4 mr-2" />
+                              Copy Link
+                            </>
+                          )}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate("/mail")}>
+                          <Mail className="w-4 h-4 mr-2" />
+                          Send Invite
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={() => deleteMutation.mutate(meeting.id)}
+                          className="text-destructive focus:text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               </motion.div>
