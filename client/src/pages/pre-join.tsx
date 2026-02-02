@@ -61,7 +61,7 @@ export default function PreJoin() {
             <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
               <Video className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-semibold">பேசு தமிழ்</span>
+            <span className="text-xl font-semibold">Telebit</span>
           </div>
           <ThemeToggle />
         </div>

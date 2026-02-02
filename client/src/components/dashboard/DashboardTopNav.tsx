@@ -50,7 +50,7 @@ export function DashboardTopNav({ isGuest = false, children }: DashboardTopNavPr
           <Video className="w-5 h-5 text-primary-foreground" />
         </div>
         <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
-          பேசு தமிழ்
+          Telebit
         </span>
       </div>
 

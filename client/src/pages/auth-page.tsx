@@ -45,7 +45,7 @@ export default function AuthPage() {
               <Video className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
             </div>
             <span className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60 tracking-tight">
-              பேசு தமிழ்
+              Telebit
             </span>
           </div>
           <ThemeToggle />
@@ -84,16 +84,16 @@ export default function AuthPage() {
           
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1]">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-400">
-              தமிழ் பேசலாம்
+              Connect Instantly
             </span>
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-pink-400">
-              வாங்க
+              with Telebit
             </span>
           </h1>
           
           <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-            தெளிவான காணொளி மற்றும் ஒலியுடன் உடனடியாக இணையுங்கள். பதிவிறக்கம் இல்லை, சிக்கல் இல்லை — எளிமையான கூட்டு பணி மட்டுமே.
+            Connect instantly with crystal-clear video and audio. No downloads, no hassle — just simple collaboration.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">

@@ -544,7 +544,7 @@ function MeetingContent({ roomId, serverUrl, onLeave, isHost }: { roomId: string
     <div className="flex flex-col h-screen bg-background">
       <header className="flex items-center justify-between gap-2 px-4 py-2 border-b bg-card shrink-0 z-30">
         <div className="flex items-center gap-2">
-          <h1 className="text-lg font-semibold hidden sm:block">பேசு தமிழ்</h1>
+          <h1 className="text-lg font-semibold hidden sm:block">Telebit</h1>
           <Badge variant="secondary" className="text-xs">
             Room: {roomId}
           </Badge>

@@ -289,7 +289,7 @@ export default function MailPage() {
                     type="text"
                     value={fromName}
                     onChange={(e) => setFromName(e.target.value)}
-                    placeholder="பேசு தமிழ்"
+                    placeholder="Telebit"
                     className="w-full bg-secondary/50 border border-white/10 rounded-xl py-3 px-4 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50"
                   />
                 </div>

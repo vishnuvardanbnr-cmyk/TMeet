@@ -25,7 +25,7 @@ export default function GuestHome() {
             {greeting()}, Guest!
           </h1>
           <p className="text-muted-foreground">
-            Welcome to பேசு தமிழ். Start or join a meeting to get connected.
+            Welcome to Telebit. Start or join a meeting to get connected.
           </p>
         </motion.div>
 
