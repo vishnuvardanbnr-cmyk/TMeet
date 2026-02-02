@@ -59,6 +59,7 @@ export default function SchedulerPage() {
       queryClient.invalidateQueries({ queryKey: ["/api/meetings"] });
       queryClient.invalidateQueries({ queryKey: ["/api/meetings/today"] });
       resetForm();
+      setFilter("all");
       toast({ title: "Meeting scheduled", description: "Your meeting has been scheduled successfully" });
     },
     onError: () => {

@@ -590,9 +590,10 @@ export async function registerRoutes(
   app.get("/api/meetings", async (req, res) => {
     try {
       const now = new Date();
-      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      // Include meetings from 24 hours ago to handle timezone differences
+      const cutoffTime = new Date(now.getTime() - 24 * 60 * 60 * 1000);
       const allMeetings = await db.select().from(meetings).where(
-        gte(meetings.scheduledAt, startOfToday)
+        gte(meetings.scheduledAt, cutoffTime)
       ).orderBy(meetings.scheduledAt);
       res.json(allMeetings);
     } catch (error: any) {
