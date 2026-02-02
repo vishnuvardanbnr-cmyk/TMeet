@@ -18,6 +18,7 @@ interface Meeting {
   roomId: string;
   description?: string;
   endedAt?: string;
+  hostToken?: string;
 }
 
 type FilterType = "all" | "upcoming" | "today" | "past";
@@ -151,8 +152,9 @@ export default function SchedulerPage() {
     }
   };
 
-  const handleJoinMeeting = (roomId: string) => {
-    navigate(`/room/${roomId}/join`);
+  const handleJoinMeeting = (meeting: Meeting) => {
+    const hostQuery = meeting.hostToken ? `?host=${meeting.hostToken}` : "";
+    navigate(`/room/${meeting.roomId}/join${hostQuery}`);
   };
 
   const handleInvite = (meetingId: number) => {
@@ -406,7 +408,7 @@ export default function SchedulerPage() {
                               {status.label !== "Past" && status.label !== "Ended" && (
                                 <Button 
                                   size="sm" 
-                                  onClick={() => handleJoinMeeting(meeting.roomId)}
+                                  onClick={() => handleJoinMeeting(meeting)}
                                   className="gap-1.5"
                                 >
                                   <Video className="w-3.5 h-3.5" />

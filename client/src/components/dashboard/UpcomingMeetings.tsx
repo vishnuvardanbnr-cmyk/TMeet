@@ -21,6 +21,7 @@ interface Meeting {
   roomId: string;
   description?: string;
   endedAt?: string | null;
+  hostToken?: string;
 }
 
 export function UpcomingMeetings() {
@@ -51,8 +52,9 @@ export function UpcomingMeetings() {
     },
   });
 
-  const handleJoinMeeting = (roomId: string) => {
-    navigate(`/room/${roomId}/join`);
+  const handleJoinMeeting = (meeting: Meeting) => {
+    const hostQuery = meeting.hostToken ? `?host=${meeting.hostToken}` : "";
+    navigate(`/room/${meeting.roomId}/join${hostQuery}`);
   };
 
   const handleCopyLink = async (meeting: Meeting) => {
@@ -153,7 +155,7 @@ export function UpcomingMeetings() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Button size="sm" className="h-8" onClick={() => handleJoinMeeting(meeting.roomId)}>
+                    <Button size="sm" className="h-8" onClick={() => handleJoinMeeting(meeting)}>
                       {hasEnded ? 'Rejoin' : 'Join'}
                     </Button>
                     <DropdownMenu>
