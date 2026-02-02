@@ -590,9 +590,10 @@ export async function registerRoutes(
   app.get("/api/meetings", async (req, res) => {
     try {
       const now = new Date();
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const allMeetings = await db.select().from(meetings).where(
-        gte(meetings.scheduledAt, now)
-      );
+        gte(meetings.scheduledAt, startOfToday)
+      ).orderBy(meetings.scheduledAt);
       res.json(allMeetings);
     } catch (error: any) {
       log(`Error fetching meetings: ${error.message}`, "api");
