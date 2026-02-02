@@ -1,7 +1,6 @@
 import express, { type Express } from "express";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
 export function serveStatic(app: Express) {
   // Handle both bundled (production) and unbundled (development) scenarios
