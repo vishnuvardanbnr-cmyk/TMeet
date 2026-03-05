@@ -2,10 +2,11 @@
 
 ## Overview
 
-Telebit is a full-stack video conferencing web application built with React and Node.js. It provides real-time video/audio calls, screen sharing, collaborative whiteboard, meeting scheduling, team chat, and comprehensive meeting management features. The application uses LiveKit for WebRTC-based real-time communication and PostgreSQL for data persistence.
+Telebit (பேசு தமிழ்) is a full-stack video conferencing web application built with React and Node.js. It provides real-time video/audio calls, screen sharing, collaborative whiteboard, meeting scheduling, team chat, and comprehensive meeting management features. The application uses LiveKit for WebRTC-based real-time communication and PostgreSQL for data persistence.
 
 ## Recent Changes
 
+- **Mar 2026**: Imported project from source zip, installed dependencies, configured database, and started dev server.
 - **Feb 2026**: Enhanced meeting scheduler with description field, edit functionality, copy link, meeting filters (upcoming/today/past), status indicators (Live/Today/Tomorrow/Upcoming/Past), and quick email invite button.
 
 ## User Preferences
@@ -34,7 +35,7 @@ Preferred communication style: Simple, everyday language.
 - **Session Management**: express-session with connect-pg-simple for PostgreSQL session storage
 
 ### Database Layer
-- **Database**: PostgreSQL
+- **Database**: PostgreSQL (Replit built-in)
 - **ORM**: Drizzle ORM with PostgreSQL dialect
 - **Schema Location**: `shared/schema.ts` - shared between frontend and backend
 - **Migrations**: Drizzle Kit for schema migrations (`npm run db:push`)
@@ -57,28 +58,27 @@ Preferred communication style: Simple, everyday language.
 ### LiveKit (Video Infrastructure)
 - Primary WebRTC provider for video/audio streaming
 - Requires `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`, and `VITE_LIVEKIT_URL` environment variables
-- Supports fallback configuration with `_FALLBACK` suffixed variables
-- Token generation handled server-side with usage tracking
+- Without these, the app runs but video calling features won't work
+- Get credentials at https://cloud.livekit.io
 
 ### PostgreSQL Database
-- Required for all data persistence including users, meetings, sessions
-- Connection via `DATABASE_URL` environment variable
+- Replit built-in PostgreSQL database
 - Tables: users, rooms, meetings, meeting_notes, meeting_tasks, meeting_docs, contacts, smtp_settings, meeting_invites, meeting_whiteboards, meeting_participants, meeting_recordings
 
 ### SMTP (Email)
 - Nodemailer for sending meeting invitations
 - User-configurable SMTP settings stored encrypted in database
-- Supports custom from address and name
 
-### Environment Variables Required
-- `DATABASE_URL`: PostgreSQL connection string
-- `SESSION_SECRET`: Secret for session encryption (minimum 16 characters)
-- `LIVEKIT_API_KEY`: LiveKit API key
-- `LIVEKIT_API_SECRET`: LiveKit API secret
-- `VITE_LIVEKIT_URL`: LiveKit server WebSocket URL
+### Environment Variables Set
+- `DATABASE_URL`: PostgreSQL connection string (Replit managed)
+- `SESSION_SECRET`: Secret for session encryption (Replit managed)
+- `LIVEKIT_API_KEY`: LiveKit API key (needs to be added by user)
+- `LIVEKIT_API_SECRET`: LiveKit API secret (needs to be added by user)
+- `VITE_LIVEKIT_URL`: LiveKit server WebSocket URL (needs to be added by user)
 
-### Third-Party Libraries
-- **mediasoup**: Alternative SFU option (configuration present but LiveKit is primary)
-- **framer-motion**: Page and component animations
-- **date-fns**: Date formatting and manipulation
-- **uuid/nanoid**: Unique identifier generation
+## Running the App
+
+- **Dev server**: `npm run dev` (runs on port 5000)
+- **Build**: `npm run build`
+- **Production**: `npm start`
+- **DB schema sync**: `npm run db:push`
