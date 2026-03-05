@@ -39,7 +39,7 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  setupAuth(app);
+  await setupAuth(app);
 
   // Set up Socket.IO
   const io = new SocketIOServer<ClientToServerEvents, ServerToClientEvents, {}, SocketData>(

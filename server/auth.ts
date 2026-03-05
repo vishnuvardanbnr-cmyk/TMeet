@@ -43,9 +43,20 @@ async function getUserByEmail(email: string) {
   return db.select().from(users).where(eq(users.email, email)).limit(1);
 }
 
-export function setupAuth(app: Express) {
-  // Note: Session table is created via SQL migration, not auto-created
-  // This avoids ENOENT errors in production when the bundled code can't find table.sql
+async function ensureSessionTable() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS "session" (
+      "sid" varchar NOT NULL COLLATE "default",
+      "sess" json NOT NULL,
+      "expire" timestamp(6) NOT NULL,
+      CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE
+    );
+    CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON "session" ("expire");
+  `);
+}
+
+export async function setupAuth(app: Express) {
+  await ensureSessionTable();
   const store = new PostgresSessionStore({ pool, createTableIfMissing: false });
   const isProduction = process.env.NODE_ENV === "production";
   const sessionSettings: session.SessionOptions = {
